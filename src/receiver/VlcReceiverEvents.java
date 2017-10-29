@@ -6,5 +6,5 @@ public interface VlcReceiverEvents extends EventListener {
 	public void receiverSelected();
 	public void receiverHasError();
 	public void receiverHasMessage();
-	public void recivedSuccessfully();
+	public void receivedSuccessfully();
 }
