@@ -1,5 +1,5 @@
 package navigation;
 
 public interface Navigation {
-	public void startNavigation();
+	public void startNavigation(String destination);
 }

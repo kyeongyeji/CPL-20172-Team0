@@ -65,26 +65,27 @@ public class ReceiverThread extends Thread {
 			Object[] listeners = listener.getListenerList();
 			
 			try {
-		        byte[] buffer = serialPort.readBytes(22);
+		        byte[] buffer = serialPort.readBytes(2);
 		        
 		        StringBuilder sb = new StringBuilder();
 		        
-		        for(byte b : buffer)
-		        	sb.append(String.format("%02X", b));
+		        for(int i=0; i<2; i++)
+		        	sb.append(String.format("%02d", buffer[i]));
 		        
 		        message = sb.toString();
 		        
 		        for (int i = 0; i < listeners.length; i = i+2) {
 					if (listeners[i] == VlcReceiverEvents.class) {
 						((VlcReceiverEvents)listeners[i+1]).receiverHasMessage(message);
-					}
-				}
-		        
-		        for (int i = 0; i < listeners.length; i = i+2) {
-					if (listeners[i] == VlcReceiverEvents.class) {
 						((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully();
 					}
 				}
+		        
+//		        for (int i = 0; i < listeners.length; i = i+2) {
+//					if (listeners[i] == VlcReceiverEvents.class) {
+//						((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully();
+//					}
+//				}
 			}
 			catch (SerialPortException ex) {
 				System.err.println(ex);

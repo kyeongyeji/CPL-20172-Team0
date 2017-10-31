@@ -14,6 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+
+import navigation.NavigationEvents;
+import navigation.NavigationMain;
+//import navigation.Graph;
+import navigation.Vertex;
 import receiver.Receiver;
 import receiver.VlcReceiverEventListener;
 import receiver.VlcReceiverEvents;
@@ -42,6 +48,8 @@ public class UiMain extends JFrame {
 			"r101","r108","r107","r106","entrancew","entrancee","entrances"};
 	
 	private Receiver receiverFrame = new Receiver();
+	private NavigationMain navigation = new NavigationMain();
+	//private Graph graph = new Graph();
 	
 	public UiMain(String title) {
 		super(title);
@@ -55,6 +63,7 @@ public class UiMain extends JFrame {
 		receiver = new JButton("수신기 선택");
 		receiver.setBackground(Color.WHITE);
 		receiver.addActionListener(new EventListener());
+		
 		VlcReceiverEventListener.getInstance().addMyEventListener(new VlcEventListener());
 		
 		guide = new JButton("안내 시작");
@@ -75,7 +84,6 @@ public class UiMain extends JFrame {
 		northe.add(guide);
 		
 		north.add(northe);
-		
 		
 		//center
 
@@ -100,26 +108,26 @@ public class UiMain extends JFrame {
 		this.setVisible(true);	
 	}
 	
-	public void setLight(){
-		lights = new JLabel[16];
+	public void setLight() {
+		lights = new JLabel[17];
 		point = new ImageIcon("point_mini.png");
-		for(int i=0;i<10;i++){
+		for(int i=7; i<=16; i++){
 		//	lights[i]=new JLabel("O");
 		//	lights[i].setForeground(Color.yellow);
 			lights[i]= new JLabel(point);
-			lights[i].setBounds(150+70*i, 225, 20, 20);
+			lights[i].setBounds(150+70*(i-7), 225, 20, 20);
 			lights[i].setVisible(false);
 			mappanel.add(lights[i]);
 		}
-		for(int i=10;i<13;i++){
+		for(int i=3; i>=1; i--){
 			lights[i]=new JLabel(point);
-			lights[i].setBounds(440,310+50*(i-10),20,20);
+			lights[i].setBounds(440,310+50*(3-i),20,20);
 			lights[i].setVisible(false);
 			mappanel.add(lights[i]);
 		}
-		for(int i=13;i<16;i++){
+		for(int i=6; i>=4; i--){
 			lights[i]=new JLabel(point);
-			lights[i].setBounds(520,310+50*(i-13),20,20);
+			lights[i].setBounds(520,310+50*(6-i),20,20);
 			lights[i].setVisible(false);
 			mappanel.add(lights[i]);
 		}
@@ -160,13 +168,12 @@ public class UiMain extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
 				guide.setEnabled(true);
 		}
 		
 	}
 	
-	class EventListener implements ActionListener{
+	class EventListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -175,7 +182,8 @@ public class UiMain extends JFrame {
 			if(e.getSource() == receiver)
 				receiverFrame.selectReceiver();
 			else if(e.getSource() == guide) {
-				//text.setText("guide");
+				text.setText("");
+				navigation.startNavigation("0204");
 			}
 		}
 		
@@ -195,12 +203,27 @@ public class UiMain extends JFrame {
 
 		@Override
 		public void receiverHasMessage(String message) {
-			text.append(message + "\n");
+			text.append(message);
 		}
 
 		@Override
 		public void receivedSuccessfully() {
 			
+		}
+	}
+	
+	class NavigationEventListener implements NavigationEvents {
+
+		@Override
+		public void userArrived() {
+			// TODO Auto-generated method stub
+			text.setText("도착했습니다!");
+		}
+
+		@Override
+		public void userMoved(Vertex v, String dir) {
+			// TODO Auto-generated method stub
+			text.append(dir);
 		}
 		
 	}
