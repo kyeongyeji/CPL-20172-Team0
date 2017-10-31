@@ -9,58 +9,65 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.MutableComboBoxModel;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
 import jssc.SerialPortList;
 
-public class Receiver implements VlcReceiver, ActionListener, VlcReceiverEvents {
-	
+public class Receiver implements VlcReceiver, ActionListener {
 	JButton accept = new JButton("OK");
 	JButton cancel = new JButton("Cancel");
-	JTextField BaudrateTf = new JTextField(5);
+	JTextField baudrateTf = new JTextField(5);
 	MutableComboBoxModel<String> strlist = new DefaultComboBoxModel<String>();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JComboBox interfTf = new JComboBox(strlist);
 	
-	int baudrateI;
-	SerialPort serialPort;
+	ReceiverThread thread = null;
 
+	JFrame rFrame;
+	
+	public String getMessage() {
+		return thread.getMessage();
+	}
+
+	public void setMessage(String message) {
+		thread.message = message;
+	}
+	
+	public int getSuccess() {
+		return thread.getSuccess();
+	}
+	
 	@Override
 	public void selectReceiver() {
-		// TODO Auto-generated method stub
-		JFrame rFrame = new JFrame("Serial Communication");
-		JLabel interfLabel = new JLabel("Interface");
-		JLabel BaudLabel = new JLabel("Baudrate");
-		//MutableComboBoxModel<String> strlist = new DefaultComboBoxModel<String>();
-		
-		String[] portnames = SerialPortList.getPortNames();
+		rFrame = new JFrame("Serial Communication");
 		
 		rFrame.setSize(300, 120);
 		
 		rFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		rFrame.setLayout(new FlowLayout());
+		
+		JLabel interfLabel = new JLabel("Interface");
+		JLabel baudLabel = new JLabel("Baudrate");
+		
 		rFrame.add(interfLabel);
 		rFrame.add(interfTf);
 	
-		for (int i=0; i<portnames.length; i++) {
-			strlist.addElement(portnames[i]);
-			//System.out.println(portnames[i]);
-		}
-		//strlist.addElement("item1");
+		baudLabel.setLocation(100, 100);
 		
-		BaudLabel.setLocation(100, 100);
-		rFrame.add(BaudLabel);
-		rFrame.add(BaudrateTf);
-	
+		rFrame.add(baudLabel);
+		rFrame.add(baudrateTf);
+		
 		rFrame.add(accept);
 		rFrame.add(cancel);
 		
 		accept.addActionListener(this);
 		cancel.addActionListener(this);
+		
+		for(String port : SerialPortList.getPortNames()) {
+			strlist.addElement(port);
+		}
 
 		rFrame.setVisible(true);
 	}
@@ -68,66 +75,28 @@ public class Receiver implements VlcReceiver, ActionListener, VlcReceiverEvents 
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource().equals(accept)) { // serial 통신 시작
-			receiverSelected();
+			acceptClicked();
+			
 		}
 		else if (e.getSource().equals(cancel)){ // 프로그램 종료
-			System.exit(0);
+			rFrame.dispose();
 		}
 	}
 	
-	public void receiverSelected() {
+	public void acceptClicked() {
+		System.out.println("Accept clicked");
 		
-		String baudrateS = BaudrateTf.getText();
-		baudrateI = Integer.parseInt(baudrateS);
+		String baudrateS = baudrateTf.getText();
+		int baudrate = Integer.parseInt(baudrateS);
 		
 		String portname = (String)interfTf.getSelectedItem();
-		serialPort = new SerialPort(portname);
 		
-		try {
-			serialPort.openPort();
-			serialPort.setParams(baudrateI, 8, 1, 0);
-		}
-		catch (SerialPortException ex) {
-			receiverHasError(ex);
-		}
+		thread = new ReceiverThread(portname, baudrate);
 		
+		thread.start();
 		
-		receiverHasMessage();
+		rFrame.dispose();
 	}
-	
-	public void receiverHasError(SerialPortException ex) {
-		
-		JOptionPane.showMessageDialog(null, ex);
-	};
-	
-	public void receiverHasMessage() {
-			
-		try {
-		        byte[] buffer = serialPort.readBytes(100);//Read 10 bytes from serial port
-		        StringBuilder sb = new StringBuilder();
-		        for(byte b : buffer)
-		        	sb.append(String.format("%02X", b));
-		        
-		        System.out.println(sb.toString());
-		        //serialPort.closePort();//Close serial port
-		}
-		catch (SerialPortException ex) {
-				receiverHasError(ex);
-		        //System.out.println(ex);
-		}
-		
-	};
-	
-	public void receivedSuccessfully(){
-		
-		try {
-			serialPort.closePort();
-		} catch (SerialPortException ex) {
-			receiverHasError(ex);
-			// TODO Auto-generated catch block
-			//System.out.println(ex);
-		}
-	};
 
 	public static void main(String[] args) {
 		Receiver receiver = new Receiver();
