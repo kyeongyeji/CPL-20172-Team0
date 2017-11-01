@@ -2,10 +2,12 @@ package navigation;
 
 import java.util.ArrayList;
 
+import receiver.VlcReceiverEventListener;
 import receiver.VlcReceiverEvents;
 
 public class NavigationMain implements Navigation {
-	NavigationEventListener listener = NavigationEventListener.getInstance();
+	NavigationEventListener listener;
+	//VlcReceiverEventListener ReceiverEvtListenr = VlcReceiverEventListener.getInstance();
 	
 	Graph graph;
 	ArrayList<Vertex> path;
@@ -13,7 +15,10 @@ public class NavigationMain implements Navigation {
 	boolean navigationMode;
 	
 	public NavigationMain() {
-		// ReceiverEventListener.getInstance().addReceiverEventListener(new ReceiverEvtHandler());
+		listener = NavigationEventListener.getInstance();
+		
+		VlcReceiverEventListener.getInstance().addMyEventListener(new ReceiverEvtHandler());
+		
 		navigationMode = false;
 	}
 	
@@ -21,7 +26,6 @@ public class NavigationMain implements Navigation {
 	public void startNavigation(String destination) {
 		navigationMode = true;
 		
-		//System.out.println("start navigation");
 		graph = new Graph();
 		path = new ArrayList<Vertex>();
 		
@@ -29,28 +33,28 @@ public class NavigationMain implements Navigation {
 		
 		path = findPath();
 		
+		System.out.println("start navigation");
+		
 		for (Vertex v : path) 
 			System.out.println(v);
 	}
 	
 	private ArrayList<Vertex> findPath() {
-		Vertex start = graph.light.get(12); // 출발지 : entrance
-		Vertex end = graph.light.get(1); // 목적지 : 여자화장실
-		ArrayList<Vertex> path = new ArrayList<Vertex>();
-		
-		path.add(start);
-		path.add(graph.light.get(1));
-		path.add(graph.light.get(2));
-		path.add(graph.light.get(3));
-		path.add(graph.light.get(4));
-		path.add(graph.light.get(12));
-		path.add(graph.light.get(11));
-		path.add(graph.light.get(10));
-		path.add(end);
-		
-		return path;
+	      Vertex start = graph.light.get(1); // 출발지 : entrance
+	      Vertex end = graph.light.get(8); // 목적지 : 여자화장실
+	      ArrayList<Vertex> path = new ArrayList<Vertex>();
+	      
+	      path.add(start);
+	      path.add(graph.light.get(2));
+	      path.add(graph.light.get(3));
+	      path.add(graph.light.get(11));
+	      path.add(graph.light.get(10));
+	      path.add(graph.light.get(9));
+	      path.add(end);
+	      
+	      return path;
 	}
-	
+	   
 	class ReceiverEvtHandler implements VlcReceiverEvents {
 
 		@Override
@@ -67,9 +71,10 @@ public class NavigationMain implements Navigation {
 		}
 
 		@Override
-		public void receivedSuccessfully() {
+		public void receivedSuccessfully(String message) {
 			
 			System.out.println("received successfully");
+			System.out.println(message);
 			
 			Object[] listeners = listener.getListenerList();
 			
@@ -120,7 +125,7 @@ public class NavigationMain implements Navigation {
 						}
 					}
 				}
-			} //else {
+			} else {
 				// 2 길안내 모드가 아닌 경우
 				
 				// 2.a 현재 위치에 해당하는 조명 ID 찾기
@@ -132,7 +137,7 @@ public class NavigationMain implements Navigation {
 //						((NavigationEvents)listeners[i+1]).userMoved(); // 현재 위치를 인자로 넘겨줘야 됨
 //					}
 //				}
-			//}
+			}
 		}
 
 		
@@ -141,13 +146,4 @@ public class NavigationMain implements Navigation {
 	public static void main(String[] args) {
 		new NavigationMain();
 	}
-//	
-//	@Override
-//	public void userArrived() {
-//		String arriveMessage;
-//		
-//		arriveMessage = "Arrive!!";
-//		
-//		System.out.println(arriveMessage);
-//	}
 }

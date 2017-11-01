@@ -14,8 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import com.sun.corba.se.impl.orbutil.graph.Graph;
-
+import navigation.NavigationEventListener;
 import navigation.NavigationEvents;
 import navigation.NavigationMain;
 //import navigation.Graph;
@@ -69,6 +68,9 @@ public class UiMain extends JFrame {
 		guide = new JButton("안내 시작");
 		guide.setBackground(Color.white);
 		guide.addActionListener(new EventListener());
+		
+		NavigationEventListener.getInstance().addNavigationEventListener(new NavigationEventHandler());
+		
 		guide.setEnabled(false);
 		
 		
@@ -179,8 +181,10 @@ public class UiMain extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			
-			if(e.getSource() == receiver)
+			if(e.getSource() == receiver) {
+				text.setText("");
 				receiverFrame.selectReceiver();
+			}
 			else if(e.getSource() == guide) {
 				text.setText("");
 				navigation.startNavigation("0204");
@@ -193,37 +197,37 @@ public class UiMain extends JFrame {
 
 		@Override
 		public void receiverSelected() {
-			receiver.setEnabled(false);
+			receiver.setEnabled(false); // 수신기 선택 버튼 비활성화
 		}
 
 		@Override
 		public void receiverHasError() {
-			receiver.setEnabled(true);		
+			receiver.setEnabled(true); // 수신기 선택 버튼 활성화
 		}
 
 		@Override
 		public void receiverHasMessage(String message) {
-			text.append(message);
+			text.append(message); // 조명으로부터의 메시지 출력
 		}
 
 		@Override
-		public void receivedSuccessfully() {
+		public void receivedSuccessfully(String message) {
 			
 		}
 	}
 	
-	class NavigationEventListener implements NavigationEvents {
+	class NavigationEventHandler implements NavigationEvents {
 
 		@Override
 		public void userArrived() {
-			// TODO Auto-generated method stub
-			text.setText("도착했습니다!");
+			System.out.println("in navigatin event handler userArrived");
+			text.append("도착했습니다!");
 		}
 
 		@Override
 		public void userMoved(Vertex v, String dir) {
-			// TODO Auto-generated method stub
-			text.append(dir);
+			System.out.println("in navigatin event handler userMoved");
+			text.append(dir); // 안내 메시지 출력
 		}
 		
 	}

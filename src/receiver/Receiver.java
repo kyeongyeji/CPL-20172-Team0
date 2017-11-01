@@ -83,7 +83,7 @@ public class Receiver implements VlcReceiver, ActionListener {
 		}
 	}
 	
-	public void acceptClicked() {
+	public void acceptClicked() { // OK Å¬¸¯½Ã
 		System.out.println("Accept clicked");
 		
 		String baudrateS = baudrateTf.getText();
