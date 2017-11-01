@@ -32,10 +32,10 @@ public class UiMain extends JFrame {
 	private static final long serialVersionUID = -1945875378328319477L;
 	
 	private JButton receiver, guide;
-	private JPanel north, northe, center;
+	private JPanel north, northe, center,northw;
 //	private JLabel maplabel;
 	//private JTextField text;
-	private JTextArea text;
+	private JTextArea text,textdirection;
 	private BorderLayout layout;
 	private ImageIcon point;
 	//private ImageIcon map;
@@ -57,19 +57,21 @@ public class UiMain extends JFrame {
 		setLayout(layout);
 		
 		//North
-		text= new JTextArea("",10,15);
+		text= new JTextArea("",5,15);
+		textdirection = new JTextArea("",5,15);
 		
 		receiver = new JButton("수신기 선택");
 		receiver.setBackground(Color.WHITE);
 		receiver.addActionListener(new EventListener());
 		
 		VlcReceiverEventListener.getInstance().addMyEventListener(new VlcEventListener());
+		NavigationEventListener.getInstance().addNavigationEventListener(new NavigationEventHandler());
 		
 		guide = new JButton("안내 시작");
 		guide.setBackground(Color.white);
 		guide.addActionListener(new EventListener());
 		
-		NavigationEventListener.getInstance().addNavigationEventListener(new NavigationEventHandler());
+		//NavigationEventListener.getInstance().addNavigationEventListener(new NavigationEventHandler());
 		
 		guide.setEnabled(false);
 		
@@ -77,8 +79,12 @@ public class UiMain extends JFrame {
 		north=new JPanel();
 		north.setLayout(new GridLayout(1,2,50,50));
 		
-		north.add(text);
-	
+		//north.add(text);
+		northw = new JPanel();
+		northw.setLayout(new GridLayout(1,2,20,20));
+		northw.add(text);
+		northw.add(textdirection);
+		north.add(northw);
 		
 		northe = new JPanel();
 		northe.setLayout(new GridLayout(2,1,20,20));
@@ -221,14 +227,32 @@ public class UiMain extends JFrame {
 		@Override
 		public void userArrived() {
 			System.out.println("in navigatin event handler userArrived");
-			text.append("도착했습니다!");
+			textdirection.append("도착했습니다!");
 		}
 
 		@Override
-		public void userMoved(Vertex v, String dir) {
+		public void userMoved(Vertex v, int n, String dir) {
 			System.out.println("in navigatin event handler userMoved");
-			text.append(dir); // 안내 메시지 출력
+			if (dir != null)
+				textdirection.append(dir + "\n"); // 안내 메시지 출력
+			
+			System.out.println(v);
+			
+			if (n <= 3) {
+				for (int i=1; i<=n; i++) {
+					lights[i].setVisible(true);
+				}
+			}
+			else if (n > 3 && n <= 6) {
+				for (int i=4; i<=n; i++) {
+					lights[i].setVisible(true);
+				}
+			}
+			else {
+				for (int i=n; i>=7; i--) {
+					lights[i].setVisible(true);
+				}
+			}
 		}
-		
 	}
 }

@@ -11,6 +11,7 @@ public class ReceiverThread extends Thread {
 	int baudRate;
 	
 	String message;
+	String prev_message = null;
 	int success;
 	
 	public ReceiverThread(String portName, int baudRate) {
@@ -39,6 +40,7 @@ public class ReceiverThread extends Thread {
 			serialPort.setParams(baudRate, 8, 1, 0);
 			
 			receiveVlcFrame();
+			//prev_message = message;	
 		}
 		catch (SerialPortException ex) {
 			System.err.println(ex);
@@ -65,7 +67,7 @@ public class ReceiverThread extends Thread {
 			Object[] listeners = listener.getListenerList();
 			
 			try {
-		        byte[] buffer = serialPort.readBytes(2);
+		        byte[] buffer = serialPort.readBytes(22);
 		        
 		        StringBuilder sb = new StringBuilder();
 		        
@@ -73,19 +75,24 @@ public class ReceiverThread extends Thread {
 		        	sb.append(String.format("%02X", b));
 		        
 		        message = sb.toString();
-		        
+		       // prev_message = message;	
+		           
 		        for (int i = 0; i < listeners.length; i = i+2) {
 					if (listeners[i] == VlcReceiverEvents.class) {
 						((VlcReceiverEvents)listeners[i+1]).receiverHasMessage(message);
-						//((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully(message);
+						// ((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully(message);
 					}
 				}
 		        
-		        for (int i = 0; i < listeners.length; i = i+2) {
-		        	if (listeners[i] == VlcReceiverEvents.class) {
-						((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully(message);
+		        if (prev_message != message) {
+			        for (int i = 0; i < listeners.length; i = i+2) {
+			        	if (listeners[i] == VlcReceiverEvents.class) {
+							((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully(message);
+						}
 					}
-				}
+		        }
+		        
+		        prev_message = message;	
 			}
 			catch (SerialPortException ex) {
 				System.err.println(ex);
