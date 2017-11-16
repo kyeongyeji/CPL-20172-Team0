@@ -32,7 +32,6 @@ public class Receiver extends AppCompatActivity implements View.OnClickListener{
 
         spinner=(Spinner)findViewById(R.id.spinner);
         ArrayList<String> arrlist = new ArrayList<String>();
-       // arrlist.add("COM3");
         ArrayAdapter<String> arradapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,arrlist);
         spinner.setAdapter(arradapter);
 
