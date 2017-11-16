@@ -1,111 +1,133 @@
 package navigation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+
+import navigation.MyLinkedList.Node;
 
 public class Graph {
-   public Graph() {
-		super();
-	}
-
-   ArrayList<Vertex> light = new ArrayList<Vertex>(); 
-   ArrayList<Vertex> room = new ArrayList<Vertex>();
-   ArrayList<Edge> edge = new ArrayList<Edge>();
+   int numOfLight = 16;
+   int numOfRoom = 12;
+   ArrayList<Vertex> vertex = new ArrayList<Vertex>(); 
+   MyLinkedList[] list = new MyLinkedList[numOfLight+1];
+   boolean[] visited = new boolean[numOfLight+1];
    
    public void makeGraph() {
-      int i;
+      vertex.add(new Vertex("05", "01")); // 무의미한..
+      vertex.add(new Vertex("05", "01")); // light 1: 0501
+      vertex.add(new Vertex("05", "02")); 
+      vertex.add(new Vertex("05", "03"));
+      vertex.add(new Vertex("06", "01"));
+      vertex.add(new Vertex("06", "02"));
+      vertex.add(new Vertex("06", "03"));
       
-      light.add(new Vertex("05", "01")); // 무의미한..
-      light.add(new Vertex("05", "01")); // light 1: 0501
-      light.add(new Vertex("05", "02")); 
-      light.add(new Vertex("05", "03"));
-      light.add(new Vertex("06", "01"));
-      light.add(new Vertex("06", "02"));
-      light.add(new Vertex("06", "03"));
+      vertex.add(new Vertex("01", "04")); // light 7
+      vertex.add(new Vertex("02", "04"));
+      vertex.add(new Vertex("03", "04")); 
+      vertex.add(new Vertex("04", "04")); 
+      vertex.add(new Vertex("05", "04")); 
+      vertex.add(new Vertex("06", "04"));
+      vertex.add(new Vertex("07", "04"));
+      vertex.add(new Vertex("08", "04"));
+      vertex.add(new Vertex("09", "04"));
+      vertex.add(new Vertex("10", "04")); // light 16
       
-      light.add(new Vertex("01", "04")); // light 7
-      light.add(new Vertex("02", "04"));
-      light.add(new Vertex("03", "04")); 
-      light.add(new Vertex("04", "04")); 
-      light.add(new Vertex("05", "04")); 
-      light.add(new Vertex("06", "04"));
-      light.add(new Vertex("07", "04"));
-      light.add(new Vertex("08", "04"));
-      light.add(new Vertex("09", "04"));
-      light.add(new Vertex("10", "04")); // light 16
+      vertex.add(new Vertex("01", "05")); // toilet_man (17)
+      vertex.add(new Vertex("02", "05")); // toilet_woman (18)
+      vertex.add(new Vertex("03", "05")); // 105 (19)
+      vertex.add(new Vertex("04", "05")); // 104 (20)
+      vertex.add(new Vertex("05", "05")); // 103 (21)
+      vertex.add(new Vertex("06", "05")); // 101 (22)
+      vertex.add(new Vertex("02", "02")); // 108 (23)
+      vertex.add(new Vertex("04", "02")); // 107 (24)
+      vertex.add(new Vertex("07", "02")); // 106 (25)
       
-      room.add(new Vertex("01", "05")); // toilet_man
-      room.add(new Vertex("02", "05")); // toilet_woman
-      room.add(new Vertex("03", "05")); // 105
-      room.add(new Vertex("04", "05")); // 104
-      room.add(new Vertex("05", "05")); // 103
-      room.add(new Vertex("06", "05")); // 101
-      room.add(new Vertex("02", "02")); // 108
-      room.add(new Vertex("04", "02")); // 107
-      room.add(new Vertex("07", "02")); // 106
-      
-      room.add(new Vertex("00", "04")); // 왼쪽 entrance
-      room.add(new Vertex("11", "04")); // 오른쪽 entrance
-      room.add(new Vertex("05", "00")); // 아래쪽 entrance
-      
-      
-      /* 조명끼리 edge 연결 */
-      for(i = 0; i < 9; i++) 
-         edge.add(new Edge(light.get(i), light.get(i+1)));
-      
-      edge.add(new Edge(light.get(10), light.get(11)));
-      edge.add(new Edge(light.get(12), light.get(13)));
-      edge.add(new Edge(light.get(14), light.get(15)));
-      
-      edge.add(new Edge(light.get(4), light.get(10)));
-      edge.add(new Edge(light.get(10), light.get(12)));
-      edge.add(new Edge(light.get(12), light.get(14)));
-      
-      edge.add(new Edge(light.get(5), light.get(11)));
-      edge.add(new Edge(light.get(11), light.get(13)));
-      edge.add(new Edge(light.get(13), light.get(15)));
-      
-      /* 공간과 인접 조명 edge 연결 */
-      edge.add(new Edge(room.get(0), light.get(0))); // toilet_man -- light 0
-      edge.add(new Edge(room.get(1), light.get(1))); // toilet_wom -- light 1
-      edge.add(new Edge(room.get(2), light.get(2))); // 105 -- light 2
-      
-      edge.add(new Edge(room.get(3), light.get(3))); // 104 -- light
-      edge.add(new Edge(room.get(3), light.get(4))); 
-      edge.add(new Edge(room.get(3), light.get(5))); 
-      
-      edge.add(new Edge(room.get(4), light.get(6))); // 103 -- light
-      edge.add(new Edge(room.get(4), light.get(7))); 
-      
-      edge.add(new Edge(room.get(5), light.get(8))); // 101 -- light
-      edge.add(new Edge(room.get(5), light.get(9)));
-      
-      edge.add(new Edge(room.get(6), light.get(1))); // 108 -- light 
-      
-      edge.add(new Edge(room.get(7), light.get(2))); // 107 -- light
-      edge.add(new Edge(room.get(7), light.get(3))); 
-      edge.add(new Edge(room.get(7), light.get(10))); 
-      edge.add(new Edge(room.get(7), light.get(12))); 
-      edge.add(new Edge(room.get(7), light.get(14))); 
-      
-      edge.add(new Edge(room.get(8), light.get(6))); // 106 -- light
-      edge.add(new Edge(room.get(8), light.get(7))); 
-      edge.add(new Edge(room.get(8), light.get(8))); 
-      edge.add(new Edge(room.get(8), light.get(11))); 
-      edge.add(new Edge(room.get(8), light.get(13))); 
-      edge.add(new Edge(room.get(8), light.get(15)));
-      
-      edge.add(new Edge(room.get(9), light.get(0))); // entrance
-      edge.add(new Edge(room.get(10), light.get(9))); 
-      edge.add(new Edge(room.get(11), light.get(14)));
-      edge.add(new Edge(room.get(11), light.get(15))); 
+      vertex.add(new Vertex("00", "04")); // 왼쪽 entrance (26)
+      vertex.add(new Vertex("05", "00")); // 아래쪽 entrance (27)
+      vertex.add(new Vertex("11", "04")); // 오른쪽 entrance (28)
    }
-}
-
-class Edge{
-   Vertex v1, v2;
    
-   public Edge(Vertex v1, Vertex v2){
-      this.v1 = v1;
-      this.v2 = v2;
+   public void createList()
+   {
+      for(int i = 0; i <= numOfLight; i++) {
+         if(list[i] == null) {
+            //System.out.println(i);
+            list[i] = new MyLinkedList();
+         }
+      }
+      
+      list[1].add(vertex.get(2));
+      list[1].add(vertex.get(27));
+      
+      list[2].add(vertex.get(1));
+      list[2].add(vertex.get(3));
+
+      list[3].add(vertex.get(2));
+      list[3].add(vertex.get(11));
+
+      list[4].add(vertex.get(5));
+      list[4].add(vertex.get(27));
+
+      list[5].add(vertex.get(4));
+      list[5].add(vertex.get(6));
+
+      list[6].add(vertex.get(5));
+      list[6].add(vertex.get(12));
+
+      for(int i = 7; i < numOfLight; i++) {
+         list[i].add(vertex.get(i+1));
+      }
+      
+      for(int i = numOfLight; i > 7; i--) {
+         list[i].add(vertex.get(i-1));
+      }
+      
+      
+      list[7].add(vertex.get(17));
+      list[7].add(vertex.get(26));
+      
+      list[8].add(vertex.get(18));
+      list[8].add(vertex.get(23));
+      
+      list[10].add(vertex.get(20));
+      list[10].add(vertex.get(24));
+      
+      list[11].add(vertex.get(20));
+      
+      list[12].add(vertex.get(20));
+      
+      list[13].add(vertex.get(21));
+   
+      list[14].add(vertex.get(25));
+      
+      list[15].add(vertex.get(25));
+      
+      list[16].add(vertex.get(22));
+      list[16].add(vertex.get(28));
+      
+/*      System.out.println("*****************************");
+      for(int i = 1; i <= numOfLight; i++) {
+         System.out.print(i + " | ");
+         list[i].printList();
+      }*/
+   }
+   
+   public int dfs(int i, int des, ArrayList<Vertex> path)
+   {
+      visited[i] = true;
+         
+      if(i == des) {
+         path.add(vertex.get(i));
+         return 1;
+      }
+      
+      for(int j = 1;  j <= numOfLight; j++) {
+         if(visited[j] == false && list[i].findNode(vertex.get(j))) {
+            
+            if(dfs(j, des, path) == 1) {path.add(vertex.get(i)); return 1;}
+            
+         }
+      }
+      return 0;
    }
 }

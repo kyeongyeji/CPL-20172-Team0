@@ -6,5 +6,4 @@ public class EverywhereMain {
 		UiMain uimain = new UiMain("Everywhere");
 		uimain.start(1200, 800);
 	}
-
 }

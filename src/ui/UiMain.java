@@ -48,6 +48,8 @@ public class UiMain extends JFrame {
 	
 	private Receiver receiverFrame = new Receiver();
 	private NavigationMain navigation = new NavigationMain();
+	
+	int des;
 	//private Graph graph = new Graph();
 	
 	public UiMain(String title) {
@@ -145,7 +147,7 @@ public class UiMain extends JFrame {
 		buttons = new JButton[12];
 
 		for(int i=0;i<12;i++){
-			buttons[i]=new JButton(rname[i]);
+			buttons[i] = new JButton(rname[i]);
 			buttons[i].setBackground(Color.WHITE);
 			buttons[i].addActionListener(new RoomListener());
 			mappanel.add(buttons[i]);	
@@ -177,6 +179,11 @@ public class UiMain extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 				guide.setEnabled(true);
+				for (int i=0; i<rname.length; i++) {
+					if (rname[i].equals(e.getActionCommand()))
+						des = i;
+				}
+				
 		}
 		
 	}
@@ -193,7 +200,7 @@ public class UiMain extends JFrame {
 			}
 			else if(e.getSource() == guide) {
 				text.setText("");
-				navigation.startNavigation("0204");
+				navigation.startNavigation(des);
 			}
 		}
 		
@@ -227,7 +234,13 @@ public class UiMain extends JFrame {
 		@Override
 		public void userArrived() {
 			System.out.println("in navigatin event handler userArrived");
-			textdirection.append("도착했습니다!");
+			try {
+				Thread.sleep(1000);
+				textdirection.append("도착했습니다!");
+			}
+			catch(InterruptedException e) {
+				System.out.println(e);
+			}
 		}
 
 		@Override
@@ -238,20 +251,8 @@ public class UiMain extends JFrame {
 			
 			System.out.println(v);
 			
-			if (n <= 3) {
-				for (int i=1; i<=n; i++) {
-					lights[i].setVisible(true);
-				}
-			}
-			else if (n > 3 && n <= 6) {
-				for (int i=4; i<=n; i++) {
-					lights[i].setVisible(true);
-				}
-			}
-			else {
-				for (int i=n; i>=7; i--) {
-					lights[i].setVisible(true);
-				}
+			if (n > 0) {
+				lights[n].setVisible(true);
 			}
 		}
 	}
