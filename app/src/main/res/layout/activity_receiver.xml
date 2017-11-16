@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:context="com.jongpp.receiver.Receiver">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:text="Interface"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/textView" android:layout_weight="1"/>
+        <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/spinner" android:layout_weight="1"/>
+        <TextView
+                android:text="Baudrate"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/textView2" android:layout_weight="1"/>
+        <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text=""
+                android:ems="10"
+                android:id="@+id/baudrate" android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <Button
+                android:text="OK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/ok"/>
+        <Button
+                android:text="Cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cancel"/>
+    </LinearLayout>
+</LinearLayout>
