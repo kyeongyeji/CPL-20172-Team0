@@ -2,28 +2,45 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kimminji.jongpp">
 
+    <uses-feature android:name="android.hardware.usb.host"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label=""
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Intro">
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Intro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- 추가부분 -->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+            <!-- 추가부분 -->
+
         </activity>
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
+
 
         </activity>
         <activity
             android:name="com.jongpp.receiver.Receiver"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+            android:theme="@style/NoTitleDialog"
+            >
+         <!--   android:theme="@style/Theme.AppCompat.Dialog.Alert"> -->
+
+
 
         </activity>
 

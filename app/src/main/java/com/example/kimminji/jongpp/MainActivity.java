@@ -1,12 +1,9 @@
 package com.example.kimminji.jongpp;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,11 +26,12 @@ public class MainActivity extends AppCompatActivity{
     TextView t;
 
 
-  //  Receiver receiverFrame = new Receiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       // setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main_);
@@ -48,6 +46,8 @@ public class MainActivity extends AppCompatActivity{
         setLayout();
 
     }
+
+
 
     public void setInfo(){
         //일단 임의로 선언(button)
@@ -109,38 +109,41 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void setLayout(){
-        layout = (RelativeLayout) findViewById(R.id.layout);
-        RoomListener roomlistener = new RoomListener();
+        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        int orientation = display.getOrientation();
+        //if(orientation== Configuration.ORIENTATION_LANDSCAPE) {
+            layout = (RelativeLayout) findViewById(R.id.layout);
+            RoomListener roomlistener = new RoomListener();
 
-        button = new Button[bnum];
+            button = new Button[bnum];
 
-        for(int i=0;i<bnum;i++){
-            button[i]=new Button(this);
-           // button[i].setBackgroundColor(android.R.color.white);
-            button[i].setBackground(getDrawable(R.drawable.bshape));
-            button[i].setLayoutParams(new LinearLayout.LayoutParams(binfo[i].getWidth(), binfo[i].getHeight()));
-            button[i].setX(binfo[i].getX());
-            button[i].setY(binfo[i].getY());
-            button[i].setText(bname[i]);
-            button[i].setOnClickListener(roomlistener);
-            layout.addView(button[i]);
+            for (int i = 0; i < bnum; i++) {
+                button[i] = new Button(this);
+                // button[i].setBackgroundColor(android.R.color.white);
+                button[i].setBackground(getDrawable(R.drawable.bshape));
+                button[i].setLayoutParams(new LinearLayout.LayoutParams(binfo[i].getWidth(), binfo[i].getHeight()));
+                button[i].setX(binfo[i].getX());
+                button[i].setY(binfo[i].getY());
+                button[i].setText(bname[i]);
+                button[i].setOnClickListener(roomlistener);
+                layout.addView(button[i]);
 
-        }
+            }
 
-        light = new ImageView[lnum];
+            light = new ImageView[lnum];
 
-        for(int i=0;i<lnum;i++){
-            light[i]=new ImageView(this);
-            light[i].setImageResource(R.drawable.point);
-            light[i].setX(linfo[i].getX());
-            light[i].setY(linfo[i].getY());
-            //안보이게
-            light[i].setVisibility(View.INVISIBLE);
-            layout.addView(light[i]);
+            for (int i = 0; i < lnum; i++) {
+                light[i] = new ImageView(this);
+                light[i].setImageResource(R.drawable.point);
+                light[i].setX(linfo[i].getX());
+                light[i].setY(linfo[i].getY());
+                //안보이게
+                light[i].setVisibility(View.INVISIBLE);
+                layout.addView(light[i]);
 
-        }
+            }
 
-
+        //}
     }
 
     class ButtonListener implements View.OnClickListener{

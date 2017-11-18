@@ -29,9 +29,10 @@
         <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text=""
-                android:ems="15"
+                android:ems="6"
+                android:imeOptions="flagNoExtractUi"
                 android:id="@+id/baudrate" android:layout_weight="2"/>
     </LinearLayout>
     <LinearLayout

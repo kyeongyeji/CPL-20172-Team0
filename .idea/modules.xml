@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Jongpp.iml" filepath="$PROJECT_DIR$/Jongpp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CPL-20172-Team0.iml" filepath="$PROJECT_DIR$/CPL-20172-Team0.iml" />
+      <module fileurl="file://C:\Users\Owner\Desktop\Jong\proj_\CPL-20172-Team0\Jongpp.iml" filepath="C:\Users\Owner\Desktop\Jong\proj_\CPL-20172-Team0\Jongpp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usbSerialForAndroid/usbSerialForAndroid.iml" filepath="$PROJECT_DIR$/usbSerialForAndroid/usbSerialForAndroid.iml" />
     </modules>
   </component>
 </project>
