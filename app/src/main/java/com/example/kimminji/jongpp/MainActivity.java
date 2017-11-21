@@ -1,14 +1,16 @@
 package com.example.kimminji.jongpp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.*;
 import com.jongpp.receiver.*;
+import com.squareup.otto.Subscribe;
+
 
 public class MainActivity extends AppCompatActivity{
 
@@ -21,11 +23,14 @@ public class MainActivity extends AppCompatActivity{
 
     RelativeLayout layout;
     Button path,receiver;
-    Intent i;
+    Intent intent;
 
     TextView t;
 
+    TextView txt1;
 
+
+    Bundle b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,75 @@ public class MainActivity extends AppCompatActivity{
         path = (Button)findViewById(R.id.path);
         path.setOnClickListener(buttonlistener);
         path.setEnabled(false);
+        txt1=(TextView)findViewById(R.id.txt1);
+        txt1.setText("txt1");
+
+        //bus 등록
+        //BusProvider.getInstance().register(this);
+        CustomBus.getInstance().register(this);
+
+
+
         setInfo();
         setLayout();
 
     }
 
+    //Bus subscribe 선언
+    @Subscribe
+    public void receiversel(VlcReceiverEvents_.receiverSelected evnt){
+      //  Toast.makeText(MainActivity.this,"Bus Event : receiver is selected",Toast.LENGTH_SHORT).show();
+        receiver.setEnabled(false);
+    }
 
+    @Subscribe
+    public void receivererr(VlcReceiverEvents_.receiverHasError evnt){
+        Toast.makeText(MainActivity.this,"Bus Event : receiver has error",Toast.LENGTH_SHORT).show();
 
-    public void setInfo(){
+    }
+
+    @Subscribe
+    public void receivermsg(VlcReceiverEvents_.receiverHasMessage evnt){
+        Toast.makeText(MainActivity.this,"Bus Event : receiver has msg\n"+evnt.getMsg(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void receiversuc(VlcReceiverEvents_.receivedSuccessfully evnt){
+        txt1.setText(evnt.getMsg());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CustomBus.getInstance().unregister(this);
+
+    }
+    class ButtonListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.receiver:
+                    intent=new Intent(MainActivity.this, Receiver.class);
+                         startActivity(intent);
+                    break;
+                case R.id.path:
+                    Toast.makeText(MainActivity.this, ((Button)v).getText().toString()+" clicked",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+
+        }
+    }
+
+    class RoomListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(MainActivity.this, "room "+((Button)v).getText().toString()+" clicked",Toast.LENGTH_SHORT).show();
+            path.setEnabled(true);
+        }
+    }
+   public void setInfo(){
         //일단 임의로 선언(button)
 
         bnum=12;
@@ -112,66 +178,39 @@ public class MainActivity extends AppCompatActivity{
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         int orientation = display.getOrientation();
         //if(orientation== Configuration.ORIENTATION_LANDSCAPE) {
-            layout = (RelativeLayout) findViewById(R.id.layout);
-            RoomListener roomlistener = new RoomListener();
+        layout = (RelativeLayout) findViewById(R.id.layout);
+        RoomListener roomlistener = new RoomListener();
 
-            button = new Button[bnum];
+        button = new Button[bnum];
 
-            for (int i = 0; i < bnum; i++) {
-                button[i] = new Button(this);
-                // button[i].setBackgroundColor(android.R.color.white);
-                button[i].setBackground(getDrawable(R.drawable.bshape));
-                button[i].setLayoutParams(new LinearLayout.LayoutParams(binfo[i].getWidth(), binfo[i].getHeight()));
-                button[i].setX(binfo[i].getX());
-                button[i].setY(binfo[i].getY());
-                button[i].setText(bname[i]);
-                button[i].setOnClickListener(roomlistener);
-                layout.addView(button[i]);
+        for (int i = 0; i < bnum; i++) {
+            button[i] = new Button(this);
+            // button[i].setBackgroundColor(android.R.color.white);
+            button[i].setBackground(getDrawable(R.drawable.bshape));
+            button[i].setLayoutParams(new LinearLayout.LayoutParams(binfo[i].getWidth(), binfo[i].getHeight()));
+            button[i].setX(binfo[i].getX());
+            button[i].setY(binfo[i].getY());
+            button[i].setText(bname[i]);
+            button[i].setOnClickListener(roomlistener);
+            layout.addView(button[i]);
 
-            }
+        }
 
-            light = new ImageView[lnum];
+        light = new ImageView[lnum];
 
-            for (int i = 0; i < lnum; i++) {
-                light[i] = new ImageView(this);
-                light[i].setImageResource(R.drawable.point);
-                light[i].setX(linfo[i].getX());
-                light[i].setY(linfo[i].getY());
-                //안보이게
-                light[i].setVisibility(View.INVISIBLE);
-                layout.addView(light[i]);
+        for (int i = 0; i < lnum; i++) {
+            light[i] = new ImageView(this);
+            light[i].setImageResource(R.drawable.point);
+            light[i].setX(linfo[i].getX());
+            light[i].setY(linfo[i].getY());
+            //안보이게
+            light[i].setVisibility(View.INVISIBLE);
+            layout.addView(light[i]);
 
-            }
+        }
 
         //}
     }
 
-    class ButtonListener implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.receiver:
-                    Toast.makeText(MainActivity.this, ((Button)v).getText().toString()+" clicked",Toast.LENGTH_SHORT).show();
-
-                    i=new Intent(MainActivity.this, Receiver.class);
-                    startActivity(i);
-                    break;
-                case R.id.path:
-                    Toast.makeText(MainActivity.this, ((Button)v).getText().toString()+" clicked",Toast.LENGTH_SHORT).show();
-                    break;
-            }
-
-        }
-    }
-
-    class RoomListener implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(MainActivity.this, "room "+((Button)v).getText().toString()+" clicked",Toast.LENGTH_SHORT).show();
-            path.setEnabled(true);
-        }
-    }
 }
 
