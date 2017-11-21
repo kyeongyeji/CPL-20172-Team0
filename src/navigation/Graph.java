@@ -92,8 +92,10 @@ public class Graph {
       list[10].add(vertex.get(20));
       list[10].add(vertex.get(24));
       
+      list[11].add(vertex.get(3));
       list[11].add(vertex.get(20));
       
+      list[12].add(vertex.get(6));
       list[12].add(vertex.get(20));
       
       list[13].add(vertex.get(21));
@@ -104,12 +106,6 @@ public class Graph {
       
       list[16].add(vertex.get(22));
       list[16].add(vertex.get(28));
-      
-/*      System.out.println("*****************************");
-      for(int i = 1; i <= numOfLight; i++) {
-         System.out.print(i + " | ");
-         list[i].printList();
-      }*/
    }
    
    public int dfs(int i, int des, ArrayList<Vertex> path)

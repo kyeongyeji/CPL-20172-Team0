@@ -71,16 +71,20 @@ public class ReceiverThread extends Thread {
 		        
 		        StringBuilder sb = new StringBuilder();
 		        
-		        for(byte b : buffer)
-		        	sb.append(String.format("%02X", b));
+		        //for(byte b : buffer)
+		        //	sb.append(String.format("%02X", b));
 		        
-		        message = sb.toString();
-		       // prev_message = message;	
+		        for (int i = 0; i < 22; i++) {
+		        	if (i == 3) {
+		        		sb.append(String.format("%02X", buffer[i]));
+		        	}
+		        }
+		        
+		        message = sb.toString(); // message´Â Á¶¸í ID	
 		           
 		        for (int i = 0; i < listeners.length; i = i+2) {
 					if (listeners[i] == VlcReceiverEvents.class) {
 						((VlcReceiverEvents)listeners[i+1]).receiverHasMessage(message);
-						// ((VlcReceiverEvents)listeners[i+1]).receivedSuccessfully(message);
 					}
 				}
 		        

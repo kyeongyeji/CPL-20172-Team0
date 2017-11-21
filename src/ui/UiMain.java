@@ -201,6 +201,8 @@ public class UiMain extends JFrame {
 			else if(e.getSource() == guide) {
 				text.setText("");
 				navigation.startNavigation(des);
+				
+				System.out.println("¸ñÀûÁö : " + des);
 			}
 		}
 		
