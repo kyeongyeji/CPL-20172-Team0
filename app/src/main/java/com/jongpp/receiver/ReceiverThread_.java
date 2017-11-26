@@ -81,12 +81,14 @@ public class ReceiverThread_ extends Thread{
 
                     StringBuilder sb = new StringBuilder();
 
-                    for(byte b : buffer)
-                        sb.append(String.format("%02X", b));
+                    for(int i = 0; i < 22; i++)
+                        if (i == 3)
+                            sb.append(String.format("%02X", buffer[i]));
 
                     message = sb.toString();
 
                     if (prev_message != message) {
+
                         BusUtil.postOnMain(CustomBus.getInstance(),new VlcReceiverEvents_.receivedSuccessfully(message));
                     }
 

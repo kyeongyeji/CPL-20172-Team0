@@ -20,6 +20,8 @@
             <TextView
                     android:text="2"
                     android:layout_width="250dp"
+                android:lines="15"
+                    android:maxLines="15"
                     android:layout_height="100dp" android:id="@+id/txt2"/>
         </ScrollView>
 
