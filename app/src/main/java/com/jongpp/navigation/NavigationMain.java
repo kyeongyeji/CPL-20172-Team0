@@ -25,7 +25,6 @@ public class NavigationMain implements Navigation {
 
         //Bus 등록
         CustomBus.getInstance().register(this);
-      //  CustomBus.getInstance().post(new NavigationEvents.naviMessage("in navigation main"));
 
         navigationMode = false;
     }
@@ -125,16 +124,12 @@ public class NavigationMain implements Navigation {
                     direction = null;
                 }
 
-                //navigationMode = false; // 도착 -> if문 빠져나감
-                //direction = null;
             }
             else {
                 // 1.c 마지막 경로가 아닌 경우
                 Vertex v = noticePath();
                 int index = graph.vertex.indexOf(v);
 
-                // 현재 위치를 UI에게 알려줌
-              //  CustomBus.getInstance().post(new NavigationEvents.naviMessage(direction));
 
                 CustomBus.getInstance().post(new NavigationEvents.userMoved(index,direction));
 
@@ -207,7 +202,4 @@ public class NavigationMain implements Navigation {
         return v;
     }
 
-  /*  public static void main(String[] args) {
-        new NavigationMain();
-    }*/
 }
