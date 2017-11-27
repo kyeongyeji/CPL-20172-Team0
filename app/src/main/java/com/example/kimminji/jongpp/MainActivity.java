@@ -1,14 +1,10 @@
 package com.example.kimminji.jongpp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.*;
 import com.jongpp.receiver.*;
@@ -29,12 +25,9 @@ public class MainActivity extends AppCompatActivity{
     Button path,receiver;
     Intent intent;
 
-    TextView t;
     TextView txt1,txt2;
     NavigationMain navigation;
 
-    String changestr="";
-    Bundle b;
 
 
     @Override
@@ -70,7 +63,6 @@ public class MainActivity extends AppCompatActivity{
     //Bus subscribe 선언
     @Subscribe
     public void receiversel(VlcReceiverEvents_.receiverSelected evnt){
-      //  Toast.makeText(MainActivity.this,"Bus Event : receiver is selected",Toast.LENGTH_SHORT).show();
         receiver.setEnabled(false);
     }
 

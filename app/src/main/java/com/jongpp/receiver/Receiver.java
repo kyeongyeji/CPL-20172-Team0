@@ -7,13 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.*;
 
 import com.example.kimminji.jongpp.CustomBus;
 import com.example.kimminji.jongpp.R;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
-import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 
@@ -56,7 +54,6 @@ public class Receiver extends AppCompatActivity implements View.OnClickListener,
         spinner.setAdapter(arradapter);
 
         //bus 등록
-       // BusProvider.getInstance().register(this);
         CustomBus.getInstance().register(this);
 
 
@@ -120,7 +117,6 @@ public class Receiver extends AppCompatActivity implements View.OnClickListener,
  @Override
     protected void onDestroy() {
         super.onDestroy();
-        //BusProvider.getInstance().unregister(this);
         CustomBus.getInstance().unregister(this);
 
     }

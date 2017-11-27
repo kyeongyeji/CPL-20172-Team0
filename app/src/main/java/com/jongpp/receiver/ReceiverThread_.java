@@ -23,13 +23,10 @@ public class ReceiverThread_ extends Thread{
     UsbManager manager;
     UsbDeviceConnection connection;
 
-    Handler mHandler;
 
     UsbSerialPort mPort;
-    final String tag = "Receiver";
     String message;
     String prev_message = null;
-    String msg;
 
 
     public ReceiverThread_(UsbManager manager,UsbSerialDriver driver, int baudRate) {

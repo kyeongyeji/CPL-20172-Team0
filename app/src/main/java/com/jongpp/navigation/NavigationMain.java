@@ -63,7 +63,6 @@ public class NavigationMain implements Navigation {
         int length = graph.list.length;
         boolean find = false;
         int i;
-        Vertex end = graph.vertex.get(8); // 목적지 : 여자화장실
         ArrayList<Vertex> path = new ArrayList<Vertex>();
 
         path.add(new Vertex("00", "00"));
@@ -111,7 +110,6 @@ public class NavigationMain implements Navigation {
         // 1. 현재 길 안내 모드인지 확인
         if (navigationMode) {
             // 1.a 해당 경로로 움직였는지 확인
-
             // 1.b 움직였다면 마지막 경로인지 확인
             // 마지막 경로 인 경우
             if (index <= 0) {
@@ -129,8 +127,6 @@ public class NavigationMain implements Navigation {
                 // 1.c 마지막 경로가 아닌 경우
                 Vertex v = noticePath();
                 int index = graph.vertex.indexOf(v);
-
-
                 CustomBus.getInstance().post(new NavigationEvents.userMoved(index,direction));
 
             }
